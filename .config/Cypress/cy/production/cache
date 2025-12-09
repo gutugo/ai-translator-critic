@@ -1,0 +1,10 @@
+{
+  "PROJECT_PREFERENCES": {
+    "workspace": {
+      "lastBrowser": {
+        "name": "electron",
+        "channel": "stable"
+      }
+    }
+  }
+}
