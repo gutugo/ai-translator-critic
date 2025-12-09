@@ -2,32 +2,24 @@ describe('AI Translator & Critic Flow', () => {
   // Перед каждым тестом мы настраиваем окружение
   beforeEach(() => {
     // 1. MOCKING СЕТЕВЫХ ЗАПРОСОВ
-    // Мы используем cy.intercept(), чтобы перехватить запросы к реальному API.
-    // Это изолирует тесты от внешнего мира, экономит деньги и делает тесты стабильными.
-
-    // Mock 1: Перехват запроса на ПЕРЕВОД (Translate)
-    // Мы ищем запрос, в теле которого есть model_name для перевода.
+    // Используем один interceptor для обоих типов запросов и различаем их по телу
     cy.intercept('POST', 'https://api.mentorpiece.org/v1/process-ai-request', (req) => {
       if (req.body.model_name === 'Qwen/Qwen3-VL-30B-A3B-Instruct') {
+        req.alias = 'translateRequest';
         req.reply({
           statusCode: 200,
           body: { response: "Mocked Translation: The sun is shining." },
-          delay: 500 // Добавляем небольшую задержку для реалистичности
+          delay: 500
         });
-      }
-    }).as('translateRequest'); // Даем алиас этому перехвату, чтобы потом ждать его
-
-    // Mock 2: Перехват запроса на ОЦЕНКУ (Critique)
-    // Мы ищем запрос, в теле которого есть model_name для критики.
-    cy.intercept('POST', 'https://api.mentorpiece.org/v1/process-ai-request', (req) => {
-      if (req.body.model_name === 'claude-sonnet-4-5-20250929') {
+      } else if (req.body.model_name === 'claude-sonnet-4-5-20250929') {
+        req.alias = 'critiqueRequest';
         req.reply({
           statusCode: 200,
           body: { response: "Mocked Grade: 9/10. Fluent and accurate." },
           delay: 500
         });
       }
-    }).as('critiqueRequest');
+    });
   });
 
   it('should successfully translate text and provide critique', () => {
@@ -42,10 +34,11 @@ describe('AI Translator & Critic Flow', () => {
 
     // 3. Выбор языка
     // В текущей реализации (shadcn select) это немного сложнее, чем обычный select
-    // Сначала открываем выпадающий список
-    cy.contains('Select Language').click();
+    // Сначала открываем выпадающий список (по умолчанию выбран English, поэтому ищем текст English)
+    // Или кликаем по триггеру
+    cy.get('button[role="combobox"]').click();
     // Выбираем опцию (English)
-    cy.contains('English').click();
+    cy.get('[role="option"]').contains('English').click();
 
     // 4. Нажатие кнопки "Translate & Critique"
     // Примечание: В текущей реализации одна кнопка запускает оба процесса последовательно

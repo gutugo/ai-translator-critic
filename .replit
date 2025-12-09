@@ -4,6 +4,7 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
+packages = ["glib", "nss", "nspr", "at-spi2-atk", "cups", "dbus", "libdrm", "gtk3", "pango", "cairo", "gdk-pixbuf", "xorg.libX11", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXrandr", "xorg.libxcb", "mesa", "alsa-lib", "libxkbcommon", "wayland", "at-spi2-core", "xorg.xorgserver"]
 
 [deployment]
 deploymentTarget = "static"
