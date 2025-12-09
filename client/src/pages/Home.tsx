@@ -34,7 +34,6 @@ import {
 export default function Home() {
   const [inputText, setInputText] = useState("");
   const [targetLang, setTargetLang] = useState("English");
-  const [apiKey, setApiKey] = useState("");
   const [translation, setTranslation] = useState("");
   const [critique, setCritique] = useState("");
   const { toast } = useToast();
@@ -42,16 +41,15 @@ export default function Home() {
   const processRequest = useMutation({
     mutationFn: async () => {
       if (!inputText.trim()) throw new Error("Please enter some text to translate.");
-      if (!apiKey.trim()) throw new Error("Please enter your API Key.");
 
       // Step 1: Translate
       const translatePrompt = getTranslationPrompt(inputText, targetLang);
-      const translatedText = await callLLM(MODELS.TRANSLATE, translatePrompt, apiKey);
+      const translatedText = await callLLM(MODELS.TRANSLATE, translatePrompt);
       setTranslation(translatedText);
 
       // Step 2: Critique
       const critiquePrompt = getCritiquePrompt(inputText, translatedText);
-      const critiqueText = await callLLM(MODELS.CRITIQUE, critiquePrompt, apiKey);
+      const critiqueText = await callLLM(MODELS.CRITIQUE, critiquePrompt);
       setCritique(critiqueText);
 
       return { translatedText, critiqueText };
@@ -78,17 +76,6 @@ export default function Home() {
             <p className="text-muted-foreground text-sm md:text-base max-w-md">
               Professional translation powered by Qwen, with academic critique by Claude 3.5 Sonnet.
             </p>
-          </div>
-
-          <div className="flex items-center gap-2 w-full md:w-auto bg-card p-1.5 rounded-lg border shadow-sm">
-            <Key className="w-4 h-4 text-muted-foreground ml-2" />
-            <Input 
-              type="password" 
-              placeholder="Paste MentorPiece API Key" 
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              className="border-0 shadow-none focus-visible:ring-0 h-8 w-full md:w-64 bg-transparent text-sm"
-            />
           </div>
         </header>
 

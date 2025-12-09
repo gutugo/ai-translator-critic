@@ -24,20 +24,13 @@ export const LANGUAGES = [
 
 export async function callLLM(
   model_name: string, 
-  prompt: string, 
-  apiKey: string
+  prompt: string
 ): Promise<string> {
-  // Check if API key is provided
-  if (!apiKey) {
-    throw new Error("API Key is missing. Please enter your MentorPiece API Key.");
-  }
-
   try {
     const response = await fetch("https://api.mentorpiece.org/v1/process-ai-request", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model_name,
