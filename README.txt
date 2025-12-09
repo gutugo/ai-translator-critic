@@ -3,9 +3,6 @@
 
 Современный минималистичный UI ▪ Анимации Framer Motion ▪ Шрифты Inter + Lora ▪ Один клик — перевод и глубокая критика
 
-![Preview](https://raw.githubusercontent.com/gutugo/ai-translator-critic/main/attached_assets/preview.jpg)  
-(скриншот будет красиво отображаться на GitHub)
-
 ## Быстрый запуск (рекомендуемый способ — всё работает из браузера за 15 секунд)
 
 ```bash
